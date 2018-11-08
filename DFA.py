@@ -1,7 +1,8 @@
 import graphviz as gv
-from IPython.display import Image
-from IPython.display import display
+#from IPython.display import Image
+#from IPython.display import display
 import functools
+import sys
 from copy import deepcopy, copy
 import itertools
 import Lstar
@@ -22,6 +23,13 @@ class DFA:
         self.q0 = obs_table.minimum_matching_row("")
         self.F = [s for s in self.Q if obs_table.T[s]== 1]
         self._make_transition_function(obs_table)
+     
+    def show(self):
+        print('\Sigma:', self.alphabet)
+        print('Q:',self.Q)
+        print('q0:', self.q0)
+        print('F:',self.F)
+        
 
     def _make_transition_function(self,obs_table):
         self.delta = {}
@@ -51,6 +59,7 @@ class DFA:
 
         def add_nodes(graph, nodes): #stolen from http://matthiaseisen.com/articles/graphviz/
             for n in nodes:
+                print(n, file=sys.stderr)
                 if isinstance(n, tuple):
                     graph.node(n[0], **n[1])
                 else:
@@ -136,7 +145,8 @@ class DFA:
         #                  self.Q]))
         # g = add_edges(g,[((label_to_numberlabel(state),label_to_numberlabel(self.delta[state][a])),{'label':a})
         #                  for a in self.alphabet for state in self.Q])
-        display(Image(filename=g.render(filename='img/automaton')))
+        #display(Image(filename=g.render(filename='img/automaton')))
+        self.show()
 
     def minimal_diverging_suffix(self,state1,state2): #gets series of letters showing the two states are different,
         # i.e., from which one state reaches accepting state and the other reaches rejecting state
