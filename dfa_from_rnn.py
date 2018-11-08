@@ -12,6 +12,8 @@ alphabet = "01"
 print(target("00011000"))
 print(target("10011000"))
 
+print('========================================================================')
+
 train_set = make_train_set_for_target(target,alphabet)
 
 print(len(train_set))
@@ -28,6 +30,8 @@ print(starting_examples)
 rnn.renew()
 
 dfa = extract(rnn,time_limit = 50,initial_split_depth = 10,starting_examples=starting_examples)
+
+print('========================================================================')
 
 def percent(num,digits=2):
 	tens = pow(10,digits)
@@ -49,3 +53,5 @@ dfa_rnn = len([w for w in test_set if rnn.classify_word(w)==dfa.classify_word(w)
 print("extracted dfa score against rnn on test set:",dfa_rnn,"("+percent(dfa_rnn/n)+")")
 dfa_target = len([w for w in test_set if dfa.classify_word(w)==target(w)])
 print("extracted dfa score against target on rnn's test set:",dfa_target,"("+percent(dfa_target/n)+")")
+
+print('========================================================================')

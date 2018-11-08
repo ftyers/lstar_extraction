@@ -146,6 +146,7 @@ class DFA:
         # g = add_edges(g,[((label_to_numberlabel(state),label_to_numberlabel(self.delta[state][a])),{'label':a})
         #                  for a in self.alphabet for state in self.Q])
         #display(Image(filename=g.render(filename='img/automaton')))
+        g.render(filename='img/automaton')
         self.show()
 
     def minimal_diverging_suffix(self,state1,state2): #gets series of letters showing the two states are different,
