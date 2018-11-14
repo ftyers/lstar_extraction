@@ -13,6 +13,9 @@ class RNNClassifier:
         self.alphabet = list(alphabet)
         self.int2char = self.alphabet
         self.char2int = {c:i for i,c in enumerate(self.int2char)}
+        print('a  :',self.alphabet)
+        print('i2c:',self.int2char)
+        print('c2i:',self.char2int)
         self.int2class = [True,False] # binary classifier for now
         self.class2int = {c:i for i,c in enumerate(self.int2class)}
         self.vocab_size = len(self.alphabet)
@@ -36,9 +39,11 @@ class RNNClassifier:
         self.linear_transform.store_expressions()
             
     def _char_to_input_vector(self,char):
+        #print('_char_to_input_vector:',char)
         return self.lookup[self.char2int[char]]
             
     def _next_state(self,state,char):
+        #print('_next_state:', char)
         return self.rnn.next_state(state,self._char_to_input_vector(char))
     
     def _state_probability_distribution(self,state):
@@ -57,7 +62,8 @@ class RNNClassifier:
         return state.as_vec(), self._classify_state(state)
         
     def _word_is_over_input_alphabet(self,word):
-        return next((False for c in word if not c in self.alphabet),True)
+        #return next((False for c in word if not c in self.alphabet),True)
+        return next((False for c in word.split(' ') if not c in self.alphabet),True)
  
     def _state_accept_probability(self,s):
         probabilities = self._state_probability_distribution(s)
@@ -68,18 +74,21 @@ class RNNClassifier:
 
     def _probability_word_in_language(self,word):
         #verification, could get rid of
+        #print('_probability_word_in_language:',word)
         if not self._word_is_over_input_alphabet(word):
-            print("word is not over input alphabet")
+            print("word is not over input alphabet:", word)
             return False
         s = self.rnn.initial_state
-        for c in word:
+        for c in word.split(' '):
             s = self._next_state(s,c)
         return self._state_accept_probability(s)
 
     def classify_word(self,word):
+        #print('classify_word:',word)
         return self._probability_word_in_language(word).value()>0.5
 
     def loss_on_word(self, word, label):
+        #print('loss_on_word:',word,'|',label)
         s = self.rnn.initial_state
         p = self._probability_word_in_language(word)
         p = p if label == True else (1-p) # now p = probability of correct label for word

@@ -3,6 +3,7 @@ import DFA
 from time import clock
 
 def run_lstar(teacher,time_limit):
+    print('run_lstar')
     table = ObservationTable(teacher.alphabet,teacher)
     start = clock()
     teacher.counterexample_generator.set_time_limit(time_limit,start)
