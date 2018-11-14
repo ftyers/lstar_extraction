@@ -21,6 +21,8 @@ print(list(train_set.items())[:10])
 
 rnn = RNNClassifier(alphabet,num_layers=1,hidden_dim=10,RNNClass = LSTMNetwork)
 
+mixed_curriculum_train(rnn,train_set,stop_threshold = 0.0005)
+
 all_words = sorted(list(train_set.keys()),key=lambda x:len(x))
 pos = next((w for w in all_words if rnn.classify_word(w)==True),None)
 neg = next((w for w in all_words if rnn.classify_word(w)==False),None)
